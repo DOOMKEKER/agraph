@@ -5,5 +5,5 @@ agraph - area under the graph
 1. [ ] reseach how to aprtoximate functions by points
 2. [ ] how openCV work
   - how to search points
-  - [ ] ned to delete axes
+  - need to delete axes
 3. [ ] ...
