@@ -15,10 +15,10 @@ int main(int argc, char** argv) {
   std::vector<std::vector<cv::Point>> poly;
 
   cv::Mat horizontal_kernel =
-      cv::getStructuringElement(cv::MORPH_RECT, cv::Size(100, 1));
+      cv::getStructuringElement(cv::MORPH_RECT, cv::Size(75, 1));
 
-  cv::Mat repair_kernel =
-      cv::getStructuringElement(cv::MORPH_RECT, cv::Size(1, 6));
+  cv::Mat vertical_kernel =
+      cv::getStructuringElement(cv::MORPH_RECT, cv::Size(1, 75));
 
   while (true) {
     cap.read(img);
@@ -31,7 +31,14 @@ int main(int argc, char** argv) {
                      cv::Point(-1, -1), 2);
     cv::findContours(detected_lines, cnts, cv::RETR_EXTERNAL,
                      cv::CHAIN_APPROX_SIMPLE);
-    cv::drawContours(img, cnts, -1, cv::Scalar(255, 255, 255), 2);
+    cv::drawContours(dil, cnts, -1, cv::Scalar(0, 0, 0), 3);
+
+    // Delete vertical line
+    cv::morphologyEx(dil, detected_lines, cv::MORPH_OPEN, vertical_kernel,
+                     cv::Point(-1, -1), 2);
+    cv::findContours(detected_lines, cnts, cv::RETR_EXTERNAL,
+                     cv::CHAIN_APPROX_SIMPLE);
+    cv::drawContours(dil, cnts, -1, cv::Scalar(0, 0, 0), 3);
 
     cv::findContours(dil, contours, cv::RETR_EXTERNAL,
                      cv::CHAIN_APPROX_TC89_KCOS);
@@ -41,7 +48,7 @@ int main(int argc, char** argv) {
       area = cv::contourArea(contours[i]);
       if (area < 200) continue;
 
-      cv::approxPolyDP(contours[i], poly[i], 5, false);
+      cv::approxPolyDP(contours[i], poly[i], 2, true);
       cv::polylines(img, poly[i], false, cv::Scalar(i * 50, i * 25, 255));
     }
 

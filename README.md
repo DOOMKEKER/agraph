@@ -12,7 +12,8 @@ agraph - area under the graph
 
 ### 22 Jan
 
-[ ] Delete vertical
-[ ] Add white line in dil
-[ ] how works threadsholds?
-[ ] make it prettier
+- [x] Delete vertical
+- [x] Add white line in dil
+- [ ] how works threadsholds?
+- [ ] make it prettier
+  - [ ] add funcs
