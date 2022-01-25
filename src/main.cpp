@@ -3,15 +3,25 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
 
-int main(int argc, char** argv) {
-  cv::Mat image;
-
-  cv::VideoCapture cap(0);
-  cv::Mat img, can, dil, gray, thresh, detected_lines, result;
-  int area;
-  cv::Mat kernel = cv::getStructuringElement(cv::MORPH_DILATE, cv::Size(3, 3));
-  std::vector<std::vector<cv::Point>> contours;
+// Delete line
+void del_line(cv::Mat input, cv::Mat const& kernel) {
+  cv::Mat detected_lines;
   std::vector<std::vector<cv::Point>> cnts;
+
+  cv::morphologyEx(input, detected_lines, cv::MORPH_OPEN, kernel,
+                   cv::Point(-1, -1), 2);
+  cv::findContours(detected_lines, cnts, cv::RETR_EXTERNAL,
+                   cv::CHAIN_APPROX_SIMPLE);
+  cv::drawContours(input, cnts, -1, cv::Scalar(0, 0, 0), 3);
+}
+
+int main(int argc, char** argv) {
+  cv::VideoCapture cap(0);
+
+  cv::Mat img, can, dil, gray, thresh, detected_lines, result;
+  cv::Mat kernel = cv::getStructuringElement(cv::MORPH_DILATE, cv::Size(3, 3));
+
+  std::vector<std::vector<cv::Point>> contours;
   std::vector<std::vector<cv::Point>> poly;
 
   cv::Mat horizontal_kernel =
@@ -20,25 +30,16 @@ int main(int argc, char** argv) {
   cv::Mat vertical_kernel =
       cv::getStructuringElement(cv::MORPH_RECT, cv::Size(1, 75));
 
+  int area;
+
   while (true) {
     cap.read(img);
     cv::cvtColor(img, gray, cv::COLOR_BGR2GRAY);
     cv::Canny(gray, can, 25, 75);
     cv::dilate(can, dil, kernel);
 
-    // Delete horizontal line
-    cv::morphologyEx(dil, detected_lines, cv::MORPH_OPEN, horizontal_kernel,
-                     cv::Point(-1, -1), 2);
-    cv::findContours(detected_lines, cnts, cv::RETR_EXTERNAL,
-                     cv::CHAIN_APPROX_SIMPLE);
-    cv::drawContours(dil, cnts, -1, cv::Scalar(0, 0, 0), 3);
-
-    // Delete vertical line
-    cv::morphologyEx(dil, detected_lines, cv::MORPH_OPEN, vertical_kernel,
-                     cv::Point(-1, -1), 2);
-    cv::findContours(detected_lines, cnts, cv::RETR_EXTERNAL,
-                     cv::CHAIN_APPROX_SIMPLE);
-    cv::drawContours(dil, cnts, -1, cv::Scalar(0, 0, 0), 3);
+    del_line(dil, horizontal_kernel);
+    del_line(dil, vertical_kernel);
 
     cv::findContours(dil, contours, cv::RETR_EXTERNAL,
                      cv::CHAIN_APPROX_TC89_KCOS);
