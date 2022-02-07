@@ -133,9 +133,7 @@ int main(int argc, char** argv) {
       points.insert(points.end(), vec.begin(), vec.end());
     }
 
-    auto comp = [](cv::Point& l, cv::Point& r) {return l.x < r.x;};
-
-    std::sort(points.begin(), points.end(), comp);
+    std::sort(points.begin(), points.end());
 
     std::vector<cv::Point> points2;
 
