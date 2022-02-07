@@ -6,14 +6,9 @@ agraph - area under the graph
 
 1. [x] reseach how to aprtoximate functions by points
 2. [x] how openCV work
-3. [ ] how to search points
-4. [ ]  need to delete axes
-5. [ ] Add scaner
+3. [x] how to search points
+4. [x] need to delete axes
+5. [x] Add scaner
+6. [x] Add math
+7. [ ] Add OOP
 
-### 22 Jan
-
-- [x] Delete vertical
-- [x] Add white line in dil
-- [ ] how works threadsholds?
-- [ ] make it prettier
-  - [ ] add funcs

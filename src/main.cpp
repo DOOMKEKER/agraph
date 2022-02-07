@@ -1,10 +1,7 @@
-#include <stdio.h>
+// #include <stdio.h>
 
 #include <iostream>
-#include <opencv2/opencv.hpp>
-
-using points_ar = std::vector<std::vector<cv::Point>>;
-using RotRect = std::vector<cv::Point>;
+#include "numa.hpp"
 
 
 float w = 522;
@@ -80,7 +77,7 @@ int main(int argc, char** argv) {
   points_ar contours;
   points_ar poly, poly1;
 
-  //  Add trashhold
+  //  Add tra shhold
   cv::Mat horizontal_kernel =
       cv::getStructuringElement(cv::MORPH_RECT, cv::Size(20, 1));
 
@@ -91,7 +88,6 @@ int main(int argc, char** argv) {
   float per;
 
   while (true) {
-
     img = cv::imread("../test.jpg");
 
     cv::cvtColor(img, gray, cv::COLOR_BGR2GRAY);
@@ -168,6 +164,8 @@ int main(int argc, char** argv) {
       cv::circle(img, points2[i], 1, cv::Scalar(255, 0, 0));
     }
 
+    auto mSharedPtr =
+        std::make_shared<std::vector<cv::Point>>(std::move(points2));
 
     cv::imshow("Webcam1", dil);
     cv::imshow("Webcam2", img);
